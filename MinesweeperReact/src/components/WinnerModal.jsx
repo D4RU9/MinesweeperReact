@@ -1,21 +1,17 @@
-//import { Square } from './Square'
+import { Tile } from './Tile'
 
 export function WinnerModal ({ winner, resetGame }) {
-  if (winner === null) return null
+  if (winner === false) return null
 
-  const winnerText = winner === false ? 'Draw' : ' Wins'
+  const winnerText = 'You Won'
   return (
     <section className='winner'>
       <div className='text'>
         <h2>{winnerText}</h2>
         <header className='win'>
-          {
-              (function () {
-                if (winner) {
-                  return <Square>{winner}</Square>
-                }
-              })()
-            }
+          {    
+            <Tile>{'😸'}</Tile>     
+          }
         </header>
 
         <footer>

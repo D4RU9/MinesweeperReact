@@ -36,7 +36,7 @@ body {
 }
 
 .board h1 {
-  color: #df2828;
+  color: #ffffff;
   margin-bottom: 16px;
 }
 
@@ -83,7 +83,7 @@ body {
   border-color: transparent;
 }
 
-.square {
+.tile {
   width: 100px;
   height: 100px;
   border: 2px solid #eee;
@@ -92,10 +92,9 @@ body {
   place-items: center;
   cursor: pointer;
   font-size: 48px;
-  color: transparent
 }
 
-.square:hover {
+.tile:hover {
   width: 100px;
   height: 100px;
   border: 2px solid #000000;
@@ -108,7 +107,7 @@ body {
   color: transparent
 }
 
-.square.is-uncovered {
+.tile.is-uncovered {
   color: #8419ff;
   border-color: #000000;
   background: rgb(255, 255, 255);
