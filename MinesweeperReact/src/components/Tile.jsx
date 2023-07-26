@@ -1,26 +1,9 @@
-import { useState } from 'react'
-
-export const Tile = ({ children, coordinates, updateBoard, uncoverAll}) => {
-  const [isTileUncovered, setIsTileUncovered] =  useState(false) 
-  let className = ''
-  if (!uncoverAll) {
-    className = `tile ${isTileUncovered ? 'is-uncovered' : ''} `
-  } else {
-    className = `tile is-uncovered`
-  }
-    
-
- 
-    const handleClick = () => {
-      updateBoard(coordinates)
-      setIsTileUncovered(true)
-      //checkMine(minesPlacement, coordinates)
-    }
+export const Tile = ({ children, isClicked, onLeftClick, onRightClick, disabled}) => {
+  const className = `tile ${isClicked ? 'is-uncovered' : ''} ${disabled ? 'is-disabled' : ''} ` 
     
     return (
-      <div onClick={handleClick} className={className}>
+      <div onClick={onLeftClick} onContextMenu={onRightClick} className={className}>
         {children}
       </div>
     )
   }
-  //() => setIsUncovered(true)

@@ -1,24 +1,14 @@
-import { Tile } from './Tile'
 
-export function WinnerModal ({ winner, resetGame }) {
-  if (winner === false) return null
+export function WinnerModal ({ winner }) {
+  if (winner === null) return null
 
-  const winnerText = 'You Won'
+  const ResultText = winner === true ? 'You Win' : ' You Lose'
   return (
     <section className='winner'>
       <div className='text'>
-        <h2>{winnerText}</h2>
-        <header className='win'>
-          {    
-            <Tile>{'😸'}</Tile>     
-          }
-        </header>
-
-        <footer>
-          <button onClick={resetGame}>Restart</button>
-        </footer>
+        <h2>{ResultText}</h2>      
       </div>
     </section>
   )
 }
-// {winner && <Square>{winner}</Square>}
+
