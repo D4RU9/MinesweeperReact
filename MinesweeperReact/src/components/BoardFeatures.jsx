@@ -34,34 +34,3 @@ export function BoardFeatures ({ winner, mineCounter, timer, resetGame }) {
     )
   }
 
-
-  // {winner && <Square>{winner}</Square>}
-  
-
-//   <section className='board-features'>
-//         <div className='mine-counter'>
-//           <h2>{'2'}</h2>      
-//         </div>
-//         <div className='cat-face'>
-//           {
-//               <Tile
-//                 key={'Cat'}
-//                 isClicked={false}
-//                 onLeftClick={resetGame}
-//               >
-//                 {(function () {
-//                   if (winner) {
-//                     return <Tile>{'😸'}</Tile> 
-//                   } else if (winner === null){
-//                     return <Tile>{'😼'}</Tile>  
-//                   } else {
-//                     return <Tile>{'😿'}</Tile> 
-//                   }
-//                 })()} 
-//               </Tile>
-//             }
-//         </div>
-//         <div className='timer'>
-//           <h2>{'4:20'}</h2>      
-//         </div>
-//       </section>

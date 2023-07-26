@@ -1,5 +1,4 @@
-
-export function WinnerModal ({ winner }) {
+export function WinnerText ({ winner }) {
   if (winner === null) return null
 
   const ResultText = winner === true ? 'You Win' : ' You Lose'

@@ -23,3 +23,33 @@
   //   }
   //   return minedBoard
   // }
+
+  
+  // const updateBoard = (rowIndex, columnIndex) => {
+  //   let coordinate = getTileCoordinate(rowIndex, columnIndex)
+
+    // const newSymbolicBoard = cloneBoard(symbolicBoard)
+    // newSymbolicBoard[rowIndex][columnIndex] = 'X'
+    // setSymbolicBoard(newSymbolicBoard)
+    //board[rowIndex][columnIndex] >= 1 && board[rowIndex][columnIndex] <= 8
+    //if (clickedCells.includes(coordinate) || winner) return
+    
+    //let newBoard = cloneBoard(board)
+    // if (minesCoordinates.includes(coordinate)) {
+    //   revealAllMines(newBoard, setBoard)
+    //   setWinner(false)
+    //   setIsDisabled(true)
+    // } else {
+      // if (countAdjacentMines(minesCoordinates, rowIndex, columnIndex) === null) {
+      //   cascadeEmptyTiles(newBoard, rowIndex, columnIndex)
+      // } else {
+      //   newBoard[rowIndex][columnIndex] = countAdjacentMines(minesCoordinates, rowIndex, columnIndex)
+      //   setBoard(newBoard)
+      // }
+    
+      // const newNumberOfTilesClicked = NumberOfTilesClicked + 1
+      // setNumberOfTilesClicked(newNumberOfTilesClicked)
+
+      // const newWinner = checkWin(newNumberOfTilesClicked)
+      // setWinner(newWinner)
+    //}   
