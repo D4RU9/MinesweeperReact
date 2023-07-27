@@ -64,4 +64,64 @@ Feature: Minesweeper  As a player:
         When the player right clicks the cell (1,2)
         Then the cell (1,2) should be flagged
 
+     Scenario: Flagging a cell - From cell tagged as inconclusive
 
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player tags the cell (1,2) as inconclusive
+        And the player right clicks the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be flagged
+
+    Scenario: Tagging a cell as inconclusive - From an untagged cell
+
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player right clicks the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be tagged as inconclusive
+
+
+     Scenario: Tagging a cell as inconclusive - From a flagged cell
+
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player flags the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be tagged as inconclusive
+
+    Scenario: Removing cell tag - From cell tagged as inconclusive
+
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player tags the cell (1,2) as inconclusive
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be untagged
+
+     Scenario: Removing cell tag - From flagged cell
+
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player flags the cell (1,2)
+        And the player right clicks the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be untagged
+
+    Scenario: Using left click on a hidden cell
+
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        When the player left clicks the cell (1,2)
+        Then the cell (1,2) should be uncovered

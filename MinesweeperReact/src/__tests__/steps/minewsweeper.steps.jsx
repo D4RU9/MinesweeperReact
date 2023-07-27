@@ -16,6 +16,12 @@ const rightClickTile = async (rowIndex, columnIndex) => {
   fireEvent.contextMenu(cell)
 }
 
+const leftClickTile = async (rowIndex, columnIndex) => {
+  const coordinate = `${rowIndex}-${columnIndex}`
+  const cell = screen.getByTestId(coordinate + ' tile')
+  fireEvent.click(cell)
+}
+
 export const MineSweeperSteps = ({
     given: Given,
     and : And,
@@ -80,11 +86,41 @@ export const MineSweeperSteps = ({
       expect(cell).toHaveTextContent('🚩')
     });
 
+    And(/^the player tags the cell \((\d+),(\d+)\) as inconclusive$/, (rowIndex, columnIndex) => {
+      tagAsInconclusive(rowIndex, columnIndex)
+    })
+
+    Then(/^the cell \((\d+),(\d+)\) should be tagged as inconclusive$/, (rowIndex, columnIndex) => {
+      const coordinate = `${rowIndex}-${columnIndex}`
+      const cell = screen.getByTestId(coordinate + ' tile')
+      expect(cell).toHaveTextContent('🤨')
+    });
   
-  
+    And(/^the player flags the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
+      rightClickTile(rowIndex, columnIndex)
+    })
+
+    Then(/^the cell \((\d+),(\d+)\) should be untagged$/, (rowIndex, columnIndex) => {
+      const coordinate = `${rowIndex}-${columnIndex}`
+      const cell = screen.getByTestId(coordinate + ' tile')
+      expect(cell).toHaveTextContent('')
+    });
+
+
+    When(/^the player left clicks the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
+      leftClickTile(rowIndex, columnIndex)
+    })
+
+    Then(/^the cell \((\d+),(\d+)\) should be uncovered$/, (rowIndex, columnIndex) => {
+
+    });
+
+
 }
 
 const tagAsInconclusive = async (rowIndex, columnIndex) => {
+  const coordinate = `${rowIndex}-${columnIndex}`
+  const cell = screen.getByTestId(coordinate + ' tile')
   rightClickTile(rowIndex, columnIndex)
   fireEvent.contextMenu(cell)
 }
