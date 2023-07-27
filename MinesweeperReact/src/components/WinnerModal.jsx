@@ -1,3 +1,4 @@
+import React from "react"
 export function WinnerText ({ winner }) {
   if (winner === null) return null
 

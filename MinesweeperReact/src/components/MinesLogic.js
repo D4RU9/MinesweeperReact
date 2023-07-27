@@ -1,3 +1,4 @@
+import React from "react"
 import { isValidCell, getTileCoordinate } from "./BoardLogic"
 import { X_AXYS_DIRECTIONS, Y_AXYS_DIRECTIONS, MAX_ROWS, MAX_COLUMNS, MAX_MINES } from "./Constants"
 
@@ -16,7 +17,7 @@ export const setMines = () => {
     return minesCoordinates
   }
 
-export const countAdjacentMines = (minesCoordinates, row, column) => {
+export const countAdjacentMines = (minesCoordinates, row, column, board) => {
     let mineCount = 0
 
     for (let direction = 0; direction < X_AXYS_DIRECTIONS.length; direction++) {
@@ -24,7 +25,7 @@ export const countAdjacentMines = (minesCoordinates, row, column) => {
       const newColumn = column + Y_AXYS_DIRECTIONS[direction]
       const newCoordinate = newRow.toString() + "-" + newColumn.toString()
 
-      if (isValidCell(newRow, newColumn, MAX_ROWS, MAX_COLUMNS) && minesCoordinates.includes(newCoordinate)) {
+      if (isValidCell(newRow, newColumn, board.length, board[0].length) && minesCoordinates.includes(newCoordinate)) {
           mineCount++
       }
     }

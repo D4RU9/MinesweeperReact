@@ -1,10 +1,12 @@
-import { useState, useEffect } from 'react'
-import { Tile } from './components/Tile'
-import { WinnerText } from './components/WinnerModal'
-import { MAX_MINES, X_AXYS_DIRECTIONS, Y_AXYS_DIRECTIONS, TILES_TO_CLICK} from './components/Constants'
-import { getTileCoordinate, createBoard, isValidCell, cloneBoard } from './components/BoardLogic'
-import { BoardFeatures } from './components/BoardFeatures'
-import { setMines, countAdjacentMines, revealAllMines } from './components/MinesLogic'
+/* eslint-disable */
+import React, { useState, useEffect } from 'react' 
+import { Tile } from './Tile'
+import { WinnerText } from './WinnerModal'
+import { MAX_ROWS, MAX_COLUMNS, MAX_MINES, X_AXYS_DIRECTIONS, Y_AXYS_DIRECTIONS, TILES_TO_CLICK} from './Constants.jsx'
+import { getTileCoordinate, createBoard, isValidCell, cloneBoard } from './BoardLogic'
+import { BoardFeatures } from './BoardFeatures'
+import { setMines, countAdjacentMines, revealAllMines } from './MinesLogic'
+import { MockDataLoader } from './MockDataLoader'
 //import { checkWinner, checkEndGame } from './Logic/board'
 //import { saveGameStorage, resetGameStorage } from './Storage/StorageLocal'
 
@@ -13,7 +15,9 @@ import { setMines, countAdjacentMines, revealAllMines } from './components/Mines
 // background: rgb(255,212,122);
 // background: radial-gradient(circle, rgba(255,212,122,1) 0%, rgba(118,59,162,1) 100%);
 
-function App () {
+export function Minesweeper () {
+
+  const [tilesToBeClicked, setTilesToBeClicked] = useState(MAX_ROWS * MAX_COLUMNS - MAX_MINES)
 
   const [mineCounter, setMineCounter] = useState(MAX_MINES)
 
@@ -21,7 +25,7 @@ function App () {
 
   const [clickedCells, setClickedCells] = useState([])
 
-  const [board, setBoard] = useState(createBoard(null))
+  const [board, setBoard] = useState(createBoard(MAX_ROWS, MAX_COLUMNS, null))
 
   const [minesCoordinates, setminesCoordinates] = useState(setMines())
 
@@ -47,14 +51,14 @@ function App () {
   }
 
   const checkWin = (NumberOfTilesClicked) => {
-    return NumberOfTilesClicked === TILES_TO_CLICK ? true : null
+    return NumberOfTilesClicked === tilesToBeClicked ? true : null
   }
 
   const uncoverTilesCascadeEffect = (clickedCells, board, rowIndex, columnIndex) => {
     const coordinate = getTileCoordinate(rowIndex, columnIndex) 
       if (!clickedCells.includes(coordinate) && !minesCoordinates.includes(coordinate)) {
         clickedCells.push(getTileCoordinate(rowIndex, columnIndex))
-        const numberOfAdjacentMines = countAdjacentMines(minesCoordinates, rowIndex, columnIndex)
+        const numberOfAdjacentMines = countAdjacentMines(minesCoordinates, rowIndex, columnIndex, board)
         board[rowIndex][columnIndex] = numberOfAdjacentMines
 
         if (numberOfAdjacentMines === null) {
@@ -63,7 +67,7 @@ function App () {
             const newColumn = columnIndex + Y_AXYS_DIRECTIONS[direction];
 
             if (
-              isValidCell(newRow, newColumn)
+              isValidCell(newRow, newColumn, board.length, board[0].length)
               && board[newRow][newColumn] !== '🚩'
             ) {
             uncoverTilesCascadeEffect(clickedCells, board, newRow, newColumn)
@@ -111,8 +115,8 @@ const handleLeftClick = (rowIndex, columnIndex) => {
     setWinner(false)
     setIsDisabled(true)
   } else {
-    if (countAdjacentMines(minesCoordinates, rowIndex, columnIndex) !== null) {
-      newBoard[rowIndex][columnIndex] = countAdjacentMines(minesCoordinates, rowIndex, columnIndex)
+    if (countAdjacentMines(minesCoordinates, rowIndex, columnIndex, newBoard) !== null) {
+      newBoard[rowIndex][columnIndex] = countAdjacentMines(minesCoordinates, rowIndex, columnIndex, newBoard)
       setBoard(newBoard)
       uncoverTile(newClickedCells, tileCoordinate)
       
@@ -126,10 +130,54 @@ const handleLeftClick = (rowIndex, columnIndex) => {
   }
 }
 
+  const getCleanMockData = (mockData) => {
+  const cleanMockData = []
+  const rows = mockData.split('\n')
+  rows.map((row) => {
+    let newRows = []
+    for (let value = 0; value < row.length; value++) {
+      if (row[value] === '*' || row[value] === 'o') {
+        newRows.push(row[value])
+      }
+    }
+    cleanMockData.push(newRows)
+  })
+  return cleanMockData
+  }
+
+  const handleMockData= (mockData) => {
+    const newMinesCoordinates = []
+    const newBoard = []
+    let rowCounter = 0
+    let columnCounter = 0
+    let mineCounter = 0
+    let rows = []
+
+    rows = mockData.includes('|') ? getCleanMockData(mockData) : mockData.split('-')
+
+    rowCounter = rows.length
+      rows.map((row, rowIndex) => {
+        const newRows = []
+        columnCounter = row.length
+        for (let value = 0; value < row.length; value++) {
+          if (row[value] === '*') {
+            mineCounter++
+            newMinesCoordinates.push(getTileCoordinate(rowIndex, value))
+          }
+          newRows.push(row[value])
+        }
+        newBoard.push(newRows)
+      })
+    setMineCounter(mineCounter)
+    setminesCoordinates(newMinesCoordinates)
+    setBoard(newBoard)
+    setTilesToBeClicked(rowCounter * columnCounter - mineCounter)  
+  } 
+
   return (
     <main className='board'>
       <h1 className='title'>Minesweeper</h1>
-      <BoardFeatures winner={winner} mineCounter={mineCounter} timer={counter} resetGame={resetGame}/>
+      <BoardFeatures winner={winner} mineCounter={mineCounter} timer={counter} resetGame={resetGame} dataTestId={'catFace'}/>
       <section className='game'>
         {  
           board.map((row, rowIndex) => {
@@ -143,6 +191,8 @@ const handleLeftClick = (rowIndex, columnIndex) => {
                   onLeftClick={() => handleLeftClick(rowIndex, columnIndex)}
                   onRightClick={(event) => handleRightClick(event, rowIndex, columnIndex)}
                   disabled={isDisabled}
+                  dataTestId={getTileCoordinate(rowIndex, columnIndex) + ' tile'}
+                  isCat={false}
                 >
                   {value}
                 </Tile>)
@@ -153,12 +203,15 @@ const handleLeftClick = (rowIndex, columnIndex) => {
       <section>
         <WinnerText winner={winner} />
       </section> 
+      <section>
+        <MockDataLoader onSubmit={handleMockData}/>
+      </section> 
       
     </main>
   )
 }
 
-export default App
+export default Minesweeper
 
 // To DO:
 //Separate the board display and the board logic (Number, symols)

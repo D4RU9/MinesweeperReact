@@ -1,15 +1,17 @@
+/* eslint-disable */
+import React from "react"
 import { MAX_ROWS, MAX_COLUMNS } from "./Constants"
 
-export const createBoard = (value) => {
-  return Array.from({ length: MAX_ROWS }, () => Array(MAX_COLUMNS).fill(value))
+export const createBoard = (maxRows, maxColumns, value) => {
+  return Array.from({ length: maxRows }, () => Array(maxColumns).fill(value))
 }
 
 export const getTileCoordinate = (rowIndex, columnIndex) => {
   return rowIndex.toString() + "-" + columnIndex.toString() // `${rowIndex}-${colIndex}`
 }
 
-export const isValidCell = (rowIndex, columnIndex) => {
-  return rowIndex >= 0 && rowIndex < MAX_ROWS && columnIndex >= 0 && columnIndex < MAX_COLUMNS
+export const isValidCell = (rowIndex, columnIndex, maxRows, maxColumns) => {
+  return rowIndex >= 0 && rowIndex < maxRows && columnIndex >= 0 && columnIndex < maxColumns
 }
 
 // Recursive function: if the mapped row is an array, then it calls itself providing the row, and then copies the row values one at a time (Matrix)  

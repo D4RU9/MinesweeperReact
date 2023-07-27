@@ -1,5 +1,7 @@
+/* eslint-disable */
+import React from 'react'
 import { Tile } from './Tile'
-export function BoardFeatures ({ winner, mineCounter, timer, resetGame }) {
+export function BoardFeatures ({ winner, mineCounter, timer, resetGame, dataTestId }) {
     const changeCatFace = (winner) => {
       if (winner) {
           return '😸'
@@ -13,8 +15,8 @@ export function BoardFeatures ({ winner, mineCounter, timer, resetGame }) {
 
     return (
         <section className='board-features'>
-        <div className='mine-counter'>
-          <h2>{mineCounter}</h2>      
+        <div className='mine-counter' >
+          <h2 data-testid='mineCounter'>Mines: {mineCounter}</h2>      
         </div>
         <div className='cat-face'>
           {
@@ -22,6 +24,8 @@ export function BoardFeatures ({ winner, mineCounter, timer, resetGame }) {
                 key={'Cat'}
                 isClicked={false}
                 onLeftClick={resetGame}
+                dataTestId={dataTestId}
+                isCat={true}
               >
                 {catFace} 
               </Tile>
