@@ -443,3 +443,412 @@ Feature: Minesweeper  As a player:
         Then the cell (1,3) should show ""
         And the cell (3,3) should show ""
         And the cell (3,1) should show ""
+
+    ## WINNING AND LOSING
+
+    Scenario: Winning the game
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        When the player uncovers the cell (1,2)
+        Then the player should win the game
+
+    Scenario: Losing the game
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        When the player uncovers the cell (1,1)
+        Then the player should lose the game
+
+    ## CELL ENABLING AND DISABLING
+
+    # Scenario: Uncovering a cell - Disabling the cell
+    #     Given the player loads the following mock data:
+    #         """
+    #         | * | o |
+    #         """
+    #     When the player uncovers the cell (1,2)
+    #     Then the cell (1,2) should be disabled
+
+        ##  LOSING
+
+    Scenario: Losing the game - Disabling all cells
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        When the player uncovers the cell (1,1)
+        Then all the cells should be disabled
+
+    # Scenario: Losing the game - Displaying wrong flag
+
+    #     Given the player loads the following mock data:
+    #         """
+    #         | * | o |
+    #         | o | o |
+    #         """
+    #     And the player flags the cell (1,2)
+    #     When the player uncovers the cell (1,1)
+    #     Then the cell (1,2) should show "💣"
+
+    Scenario: Losing the game - Displaying the exploded bomb
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        When the player uncovers the cell (1,1)
+        Then the cell (1,1) should show "💣"
+
+    Scenario: Losing the game - Displaying the covered cells as hidden
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        When the player uncovers the cell (1,1)
+        Then the cell (1,2) should show ""
+        Then the cell (2,1) should show ""
+        Then the cell (2,2) should show ""
+
+    Scenario: Losing the game - Displaying cell tagged as inconclusive
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player tags the cell (1,2) as inconclusive
+        When the player uncovers the cell (1,1)
+        Then the cell (1,2) should show "🤨"
+
+    Scenario: Losing the game - Displaying all mines
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        When the player uncovers the cell (1,1)
+        Then the cell (2,2) should show "💣"
+
+    Scenario: Losing the game - Displaying number of uncovered cells
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,2)
+        When the player uncovers the cell (1,1)
+        Then the cell (1,2) should show "2"
+
+     Scenario: Losing the game - Showing current count
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player flags the cell (1,2)
+        When the player uncovers the cell (1,1)
+        Then the mine count display should show "1"
+
+    ##  WINNING
+
+    Scenario: Winning the game - Disabling all cells
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player uncovers the cell (1,2)
+        Then all the cells should be disabled
+
+    Scenario: Winning the game - Displaying flagged cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player flags the cell (1,1)
+        When the player uncovers the cell (1,2)
+        Then the cell (1,1) should show "🚩"
+
+    # Scenario: Winning the game - Displaying cell with mine but not flagged
+    #     Given the player loads the following mock data:
+    #         """
+    #         | * | o |
+    #         """
+    #     When the player uncovers the cell (1,2)
+    #     Then the cell (1,1) should show "!"
+
+    # Scenario: Winning the game - Displaying cell with mine tagged as inconclusive
+
+    #     Given the player loads the following mock data:
+    #         """
+    #         | * | o |
+    #         """
+    #     And the player tags the cell (1,1) as inconclusive
+    #     When the player uncovers the cell (1,2)
+    #     Then the cell (1,1) should show "!"
+
+    Scenario: Winning the game - Displaying number of uncovered cells
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,2)
+        When the player uncovers the cell (2,1)
+        Then the cell (1,2) should show "2"
+        And the cell (2,1) should show "2"
+
+    Scenario: Winning the game - Setting mine count to 0
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,2)
+        When the player uncovers the cell (2,1)
+        Then the mine count display should show "0"
+
+    ## UNCOVERING ADJACENT CELLS (CASCADING) WHEN NO MINES PRESENT
+
+    Scenario: Uncovering adjacent cells
+        Given the player loads the following mock data:
+            """
+            | * | * | o | o | o |
+            | * | o | o | o | o |
+            | o | o | o | o | o |
+            | o | o | o | o | * |
+            | o | o | o | * | * |
+            """
+        When the player uncovers the cell (1,5)
+        Then the cell (1,3) should be uncovered
+        And the cell (1,4) should be uncovered
+        And the cell (1,5) should be uncovered
+        And the cell (2,3) should be uncovered
+        And the cell (2,4) should be uncovered
+        And the cell (2,5) should be uncovered
+        And the cell (3,3) should be uncovered
+        And the cell (3,4) should be uncovered
+        And the cell (3,5) should be uncovered
+        And the cell (4,3) should be uncovered
+        And the cell (4,4) should be uncovered
+        And the cell (5,1) should be uncovered
+        And the cell (5,3) should be uncovered
+    
+    # Examples:
+    #         | cell  |
+    #         | (1,3) |
+    #         | (1,4) |
+    #         | (1,5) |
+    #         | (2,2) |
+    #         | (2,3) |
+    #         | (2,4) |
+    #         | (2,5) |
+    #         | (3,1) |
+    #         | (3,2) |
+    #         | (3,3) |
+    #         | (3,4) |
+    #         | (3,5) |
+    #         | (4,1) |
+    #         | (4,2) |
+    #         | (4,3) |
+    #         | (4,4) |
+    #         | (5,1) |
+    #         | (5,2) |
+    #         | (5,3) |
+
+    Scenario: Uncovering adjacent cells - Display after cascading
+        Given the player loads the following mock data:
+            """
+            | * | * | o | o | o |
+            | * | o | o | o | o |
+            | o | o | o | o | o |
+            | o | o | o | o | * |
+            | o | o | o | * | * |
+            """
+        When the player uncovers the cell (3,3)
+        Then the cell (1,1) should show ""
+        And the cell (1,2) should show ""
+        And the cell (1,3) should show "1"
+        And the cell (2,3) should show "1"
+        And the cell (2,2) should show "3"
+        And the cell (4,4) should show "3"
+        And the cell (3,1) should show "1"
+        And the cell (3,2) should show "1"
+        And the cell (5,1) should show ""
+        And the cell (5,4) should show ""
+        And the cell (5,5) should show ""
+
+
+        # Examples:
+        #     | cell  | display |
+        #     | (1,1) | .       |
+        #     | (1,2) | .       |
+        #     | (1,3) | 1       |
+        #     | (1,4) | 0       |
+        #     | (1,5) | 0       |
+        #     | (2,1) | .       |
+        #     | (2,2) | 3       |
+        #     | (2,3) | 1       |
+        #     | (2,4) | 0       |
+        #     | (2,5) | 0       |
+        #     | (3,1) | 1       |
+        #     | (3,2) | 1       |
+        #     | (3,3) | 0       |
+        #     | (3,4) | 1       |
+        #     | (3,5) | 1       |
+        #     | (4,1) | 0       |
+        #     | (4,2) | 0       |
+        #     | (4,3) | 1       |
+        #     | (4,4) | 3       |
+        #     | (4,5) | .       |
+        #     | (5,1) | 0       |
+        #     | (5,2) | 0       |
+        #     | (5,3) | 1       |
+        #     | (5,4) | .       |
+        #     | (5,5) | .       |
+
+
+    Scenario: Uncovering adjacent cells - Flagged cell stops the cascading process
+        Given the player loads the following mock data:
+            """
+            | * | * | o | o | o |
+            | * | o | o | o | o |
+            | o | o | o | o | o |
+            | o | o | o | o | * |
+            | o | o | o | * | * |
+            """
+        And the player flags the cell (3,3)
+        When the player uncovers the cell (5,1)
+        Then the cell (1,1) should show ""
+        And the cell (1,2) should show ""
+        And the cell (1,3) should show ""
+        And the cell (2,3) should show ""
+        And the cell (2,2) should show ""
+        And the cell (4,3) should show "1"
+        And the cell (3,3) should show "🚩"
+        And the cell (3,2) should show "1"
+        And the cell (3,1) should show "1"
+        And the cell (5,4) should show ""
+        And the cell (5,5) should show "" 
+
+        # Examples:
+        #     | cell  | display |
+        #     | (1,1) | .       |
+        #     | (1,2) | .       |
+        #     | (1,3) | .       |
+        #     | (1,4) | .       |
+        #     | (1,5) | .       |
+        #     | (2,1) | .       |
+        #     | (2,2) | .       |
+        #     | (2,3) | .       |
+        #     | (2,4) | .       |
+        #     | (2,5) | .       |
+        #     | (3,1) | 1       |
+        #     | (3,2) | 1       |
+        #     | (3,3) | !       |
+        #     | (3,4) | .       |
+        #     | (3,5) | .       |
+        #     | (4,1) | 0       |
+        #     | (4,2) | 0       |
+        #     | (4,3) | 1       |
+        #     | (4,4) | .       |
+        #     | (4,5) | .       |
+        #     | (5,1) | 0       |
+        #     | (5,2) | 0       |
+        #     | (5,3) | 1       |
+        #     | (5,4) | .       |
+        #     | (5,5) | .       |
+
+    Scenario: Uncovering adjacent cells - Ignoring and uncovering inconclusive cell
+        Given the player loads the following mock data:
+            """
+            | * | * | o | o | o |
+            | * | o | o | o | o |
+            | o | o | o | o | o |
+            | o | o | o | o | * |
+            | o | o | o | * | * |
+            """
+        And the player tags the cell (3,3) as inconclusive
+        When the player uncovers the cell (5,1)
+        Then the cell (1,3) should be uncovered
+        And the cell (1,4) should be uncovered
+        And the cell (1,5) should be uncovered
+        And the cell (2,2) should be uncovered
+        And the cell (2,3) should be uncovered
+        And the cell (3,4) should be uncovered
+        And the cell (3,5) should be uncovered
+        And the cell (4,2) should be uncovered
+        And the cell (4,3) should be uncovered
+
+        # Examples:
+        #     | cell  |
+        #     | (1,3) |
+        #     | (1,4) |
+        #     | (1,5) |
+        #     | (2,2) |
+        #     | (2,3) |
+        #     | (2,4) |
+        #     | (2,5) |
+        #     | (3,1) |
+        #     | (3,2) |
+        #     | (3,3) |
+        #     | (3,4) |
+        #     | (3,5) |
+        #     | (4,1) |
+        #     | (4,2) |
+        #     | (4,3) |
+
+
+    Scenario: Uncovering adjacent cells - Winning automatically when only hidden cells are mines
+        Given the player loads the following mock data:
+            """
+            | * | o | o | o |
+            | o | o | o | o |
+            | o | o | o | o |
+            | o | o | o | o |
+            """
+        When the player uncovers the cell (3,3)
+        Then the player should win the game
+
+    ## RESETTING THE GAME
+
+    Scenario: Resetting the game - All cells should be hidden
+        Given the player clicks the Reset button
+        Then all the cells should be covered
+
+    Scenario: Resetting the game - All cells should be enabled
+        Given the player clicks the Reset button
+        Then all the cells should be enabled
+
+    Scenario: Resetting the game - After losing
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,1)
+        When the player clicks the Reset button
+        Then the game should reset
+
+    Scenario: Resetting the game - After winning
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,2)
+        And the player uncovers the cell (2,1)
+        When the player clicks the Reset button
+        Then the game should reset
+
+    Scenario: Resetting the game - At the middle of a game
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | * |
+            """
+        And the player uncovers the cell (1,2)
+        When the player clicks the Reset button
+        Then the game should reset

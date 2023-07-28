@@ -10,11 +10,6 @@ import { MockDataLoader } from './MockDataLoader'
 //import { checkWinner, checkEndGame } from './Logic/board'
 //import { saveGameStorage, resetGameStorage } from './Storage/StorageLocal'
 
-
-//const [symbolicBoard, setSymbolicBoard] = useState(createBoard(MAX_ROWS, MAX_COLUMNS, '.')
-// background: rgb(255,212,122);
-// background: radial-gradient(circle, rgba(255,212,122,1) 0%, rgba(118,59,162,1) 100%);
-
 export function Minesweeper () {
 
   const [tilesToBeClicked, setTilesToBeClicked] = useState(MAX_ROWS * MAX_COLUMNS - MAX_MINES)
@@ -132,7 +127,13 @@ const handleLeftClick = (rowIndex, columnIndex) => {
     const numberOfTilesClicked = newClickedCells.length
     const newWinner = checkWin(numberOfTilesClicked)
     setWinner(newWinner)
-    newWinner ? setIsDisabled(true) : setIsDisabled(false) 
+    if (newWinner) {
+      setIsDisabled(true)
+      setMineCounter(0)
+    } else {
+      setIsDisabled(false)
+    }
+    //newWinner ? setIsDisabled(true) && setMineCounter (0): setIsDisabled(false) 
   }
 }
 
@@ -152,7 +153,6 @@ const handleLeftClick = (rowIndex, columnIndex) => {
   }
 
   const handleMockData= (mockData) => {
-    console.log(mockData)
     const newMinesCoordinates = []
     const newBoard = []
     let rowCounter = 0
