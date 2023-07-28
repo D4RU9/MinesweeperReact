@@ -6,21 +6,58 @@
 //import { parseMockDataToString } from '../../helpers/mockDataHelper'
 //import { MAX_MINES } from '../../components/Constants'
 import React, { Component } from 'react'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import Minesweeper from '../../components/Minesweeper.jsx'
 
-const rightClickTile = async (rowIndex, columnIndex) => {
-  const coordinate = `${rowIndex}-${columnIndex}`
+const rightClickTile = (rowIndex, columnIndex) => {
+  const coordinate = `${rowIndex-1}-${columnIndex-1}`
   const cell = screen.getByTestId(coordinate + ' tile')
   fireEvent.contextMenu(cell)
 }
 
-const leftClickTile = async (rowIndex, columnIndex) => {
-  const coordinate = `${rowIndex}-${columnIndex}`
+const leftClickTile = (rowIndex, columnIndex) => {
+  const coordinate = `${rowIndex-1}-${columnIndex-1}`
   const cell = screen.getByTestId(coordinate + ' tile')
   fireEvent.click(cell)
 }
+
+const loadMockData = async (mockData) => {
+    // const textBox = screen.getByTestId('mockData-text')
+    // const button = screen.getByTestId('mockData-submit')
+    // userEvent.clear(textBox)
+    // userEvent.type(textBox, mockData)
+    // userEvent.click(button)
+  
+  const textarea = screen.getByTestId("mockData-text");
+  const submitButton = screen.getByTestId("mockData-submit");
+
+  fireEvent.change(textarea, { target: { value: mockData } });
+
+  fireEvent.click(submitButton);
+
+  await waitFor(() => expect(textarea.value).toBe(mockData));
+
+}
+
+
+// const loadMockData = (mockData) => {
+//   console.log(mockData)
+//   const text = screen.getByTestId('mockData-text')
+//   const button = screen.getByTestId('mockData-submit')
+//   userEvent.type(text, mockData)
+//   //await waitFor(() => expect(text.value).toBe(mockData))
+//   userEvent.click(button)
+
+  
+//   // const textBox = screen.getByTestId("mockData-text");
+//   // const submitButton = screen.getByTestId("mockData-submit");
+//   // fireEvent.change(textBox, { target: { value: mockData } });
+//   // fireEvent.click(submitButton);
+//   // console.log("textBox", textBox.textContent)
+//   // await waitFor(() => expect(textBox.value).toBe(mockData));
+  
+// };
 
 export const MineSweeperSteps = ({
     given: Given,
@@ -42,7 +79,7 @@ export const MineSweeperSteps = ({
     Then("all the cells should be untagged", () => {
       const tiles = game.container.querySelectorAll(".tile")
       tiles.forEach(tile => {
-        expect(tile).toHaveTextContent('')
+        expect(tile.textContent).toBe('')
       })
       
     })
@@ -53,27 +90,25 @@ export const MineSweeperSteps = ({
       })
     })
 
-    Given(/^the player loads the following mock data: "([^"]*)"$/, (data) => {
-      userEvent.keyboard('{ctrl}')
-      const textbox = screen.getByTestId('mockData-text')
-      const button = screen.getByTestId('mockData-submit')
-      userEvent.clear(textbox)
-      userEvent.type(textbox, data)
-      userEvent.click(button)
-    })
+    // Given(/^the player loads the following mock data: (.*)$/, (data) => {
+
+    //   const textbox = screen.getByTestId('mockData-text')
+    //   const button = screen.getByTestId('mockData-submit')
+    //   userEvent.clear(textbox)
+    //   userEvent.type(textbox, data)
+    //   userEvent.click(button)
+    // })
+
 
     Then(/^the mine count display should show "([^"]*)"$/, (mineNumber) => {
-      const mineCounter = screen.getByTestId('mineCounter')
-      expect(mineCounter).toHaveTextContent("Mines: ", mineNumber)
+
+        const mineCounter = screen.getByTestId('mineCounter')
+        expect(mineCounter.textContent).toBe("Mines: " + mineNumber)
+
     })
     
-    Given('the player loads the following mock data:', (data) => {
-      userEvent.keyboard('{ctrl}')
-      const textbox = screen.getByTestId('mockData-text')
-      const button = screen.getByTestId('mockData-submit')
-      userEvent.clear(textbox)
-      userEvent.type(textbox, data)
-      userEvent.click(button)
+    Given('the player loads the following mock data:', (mockData) => {
+      loadMockData(mockData)
     })
 
     When(/^the player right clicks the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
@@ -81,9 +116,9 @@ export const MineSweeperSteps = ({
     })
 
     Then(/^the cell \((\d+),(\d+)\) should be flagged$/, (rowIndex, columnIndex) => {
-      const coordinate = `${rowIndex}-${columnIndex}`
+      const coordinate = `${rowIndex-1}-${columnIndex-1}`
       const cell = screen.getByTestId(coordinate + ' tile')
-      expect(cell).toHaveTextContent('🚩')
+      expect(cell.textContent).toBe('🚩')
     });
 
     And(/^the player tags the cell \((\d+),(\d+)\) as inconclusive$/, (rowIndex, columnIndex) => {
@@ -91,9 +126,9 @@ export const MineSweeperSteps = ({
     })
 
     Then(/^the cell \((\d+),(\d+)\) should be tagged as inconclusive$/, (rowIndex, columnIndex) => {
-      const coordinate = `${rowIndex}-${columnIndex}`
+      const coordinate = `${rowIndex-1}-${columnIndex-1}`
       const cell = screen.getByTestId(coordinate + ' tile')
-      expect(cell).toHaveTextContent('🤨')
+      expect(cell.textContent).toBe('🤨')
     });
   
     And(/^the player flags the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
@@ -101,9 +136,9 @@ export const MineSweeperSteps = ({
     })
 
     Then(/^the cell \((\d+),(\d+)\) should be untagged$/, (rowIndex, columnIndex) => {
-      const coordinate = `${rowIndex}-${columnIndex}`
+      const coordinate = `${rowIndex-1}-${columnIndex-1}`
       const cell = screen.getByTestId(coordinate + ' tile')
-      expect(cell).toHaveTextContent('')
+      expect(cell.textContent).toBe('')
     });
 
 
@@ -112,17 +147,34 @@ export const MineSweeperSteps = ({
     })
 
     Then(/^the cell \((\d+),(\d+)\) should be uncovered$/, (rowIndex, columnIndex) => {
-
+      const coordinate = `${rowIndex-1}-${columnIndex-1}`
+      const cell = screen.getByTestId(coordinate + ' tile')
+  
+      expect(cell).toHaveClass('tile is-uncovered')
     });
 
+    And(/^the player uncovers the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
+      leftClickTile(rowIndex, columnIndex)
+    });
+
+    Then(/^the cell \((\d+),(\d+)\) should show "(.*)"$/, (rowIndex, columnIndex, value) => {
+      const coordinate = `${rowIndex-1}-${columnIndex-1}`
+      const cell = screen.getByTestId(coordinate + ' tile')
+      expect(cell.textContent).toBe(value)
+    });
+
+    When(/^the player unflags the cell \((\d+),(\d+)\)$/, (rowIndex, columnIndex) => {
+      rightClickTile(rowIndex, columnIndex)
+    });
 
 }
 
 const tagAsInconclusive = async (rowIndex, columnIndex) => {
-  const coordinate = `${rowIndex}-${columnIndex}`
+  const coordinate = `${rowIndex-1}-${columnIndex-1}`
   const cell = screen.getByTestId(coordinate + ' tile')
   rightClickTile(rowIndex, columnIndex)
-  fireEvent.contextMenu(cell)
+  await waitFor(() => fireEvent.contextMenu(cell))
+  
 }
 
 

@@ -23,30 +23,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">47.05% </span>
+                <span class="strong">76.47% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>16/34</span>
+                <span class='fraction'>26/34</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.66% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>1/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">25% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">48.27% </span>
+                <span class="strong">75.86% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>14/29</span>
+                <span class='fraction'>22/29</span>
             </div>
         
             
@@ -61,7 +61,7 @@
             </div>
         </template>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line medium'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -113,33 +113,33 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-yes">25x</span>
-<span class="cline-any cline-yes">258x</span>
-<span class="cline-any cline-yes">258x</span>
-<span class="cline-any cline-yes">258x</span>
+<span class="cline-any cline-yes">109x</span>
+<span class="cline-any cline-yes">109x</span>
+<span class="cline-any cline-yes">109x</span>
+<span class="cline-any cline-yes">1144x</span>
+<span class="cline-any cline-yes">1144x</span>
+<span class="cline-any cline-yes">1144x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">258x</span>
-<span class="cline-any cline-yes">250x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">25x</span>
+<span class="cline-any cline-yes">1144x</span>
+<span class="cline-any cline-yes">1090x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">109x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">41x</span>
+<span class="cline-any cline-yes">328x</span>
+<span class="cline-any cline-yes">328x</span>
+<span class="cline-any cline-yes">328x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">328x</span>
+<span class="cline-any cline-yes">95x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">41x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -172,19 +172,19 @@ export const setMines = () =&gt; {
     return minesCoordinates
   }
 &nbsp;
-export const <span class="cstat-no" title="statement not covered" >countAdjacentMines </span>= <span class="fstat-no" title="function not covered" >(m</span>inesCoordinates, row, column, board) =&gt; {
-    let mineCount = <span class="cstat-no" title="statement not covered" >0</span>
+export const countAdjacentMines = (minesCoordinates, row, column, board) =&gt; {
+    let mineCount = 0
 &nbsp;
-<span class="cstat-no" title="statement not covered" >    for (let direction = <span class="cstat-no" title="statement not covered" >0; d</span>irection &lt; X_AXYS_DIRECTIONS.length; direction++) {</span>
-      const newRow = <span class="cstat-no" title="statement not covered" >row + X_AXYS_DIRECTIONS[direction]</span>
-      const newColumn = <span class="cstat-no" title="statement not covered" >column + Y_AXYS_DIRECTIONS[direction]</span>
-      const newCoordinate = <span class="cstat-no" title="statement not covered" >newRow.toString() + "-" + newColumn.toString()</span>
+    for (let direction = 0; direction &lt; X_AXYS_DIRECTIONS.length; direction++) {
+      const newRow = row + X_AXYS_DIRECTIONS[direction]
+      const newColumn = column + Y_AXYS_DIRECTIONS[direction]
+      const newCoordinate = newRow.toString() + "-" + newColumn.toString()
 &nbsp;
-<span class="cstat-no" title="statement not covered" >      <span class="missing-if-branch" title="if path not taken" >I</span>if (isValidCell(newRow, newColumn, board.length, board[0].length) &amp;&amp; minesCoordinates.includes(newCoordinate)) {</span>
-<span class="cstat-no" title="statement not covered" >          mineCount++</span>
+      if (isValidCell(newRow, newColumn, board.length, board[0].length) &amp;&amp; minesCoordinates.includes(newCoordinate)) {
+          mineCount++
       }
     }
-<span class="cstat-no" title="statement not covered" >    return mineCount === 0 ? null : mineCount</span>
+    return mineCount === 0 ? null : mineCount
 }
 &nbsp;
 export const <span class="cstat-no" title="statement not covered" >revealAllMines </span>= <span class="fstat-no" title="function not covered" >(n</span>ewBoard ,setBoard, clickedCells, setClickedCells, minesCoordinates) =&gt; {
@@ -205,7 +205,7 @@ const newClickedCells = <span class="cstat-no" title="statement not covered" >[.
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2023-07-27T15:57:39.929Z
+                at 2023-07-28T14:23:56.998Z
             </div>
         <script src="prettify.js"></script>
         <script>

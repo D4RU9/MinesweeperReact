@@ -106,6 +106,12 @@ const handleRightClick = (event, rowIndex, columnIndex) => {
   }
 }
 
+const checkTileIsFlagged = (newBoard, rowIndex, columnIndex) => {
+  if ( newBoard[rowIndex][columnIndex] === '🚩') {
+    setMineCounter(mineCounter+1)
+  }
+}
+
 const handleLeftClick = (rowIndex, columnIndex) => {
   const tileCoordinate = getTileCoordinate(rowIndex, columnIndex)
   const newBoard = cloneBoard(board)
@@ -115,11 +121,11 @@ const handleLeftClick = (rowIndex, columnIndex) => {
     setWinner(false)
     setIsDisabled(true)
   } else {
+    checkTileIsFlagged(newBoard, rowIndex, columnIndex)
     if (countAdjacentMines(minesCoordinates, rowIndex, columnIndex, newBoard) !== null) {
       newBoard[rowIndex][columnIndex] = countAdjacentMines(minesCoordinates, rowIndex, columnIndex, newBoard)
       setBoard(newBoard)
-      uncoverTile(newClickedCells, tileCoordinate)
-      
+      uncoverTile(newClickedCells, tileCoordinate)  
     } else {
       uncoverTilesCascadeEffect(newClickedCells, newBoard, rowIndex, columnIndex)
     }
@@ -146,6 +152,7 @@ const handleLeftClick = (rowIndex, columnIndex) => {
   }
 
   const handleMockData= (mockData) => {
+    console.log(mockData)
     const newMinesCoordinates = []
     const newBoard = []
     let rowCounter = 0
@@ -164,26 +171,33 @@ const handleLeftClick = (rowIndex, columnIndex) => {
             mineCounter++
             newMinesCoordinates.push(getTileCoordinate(rowIndex, value))
           }
-          newRows.push(row[value])
+          newRows.push(row[null])
         }
         newBoard.push(newRows)
       })
+
     setMineCounter(mineCounter)
     setminesCoordinates(newMinesCoordinates)
     setBoard(newBoard)
     setTilesToBeClicked(rowCounter * columnCounter - mineCounter)  
+    changeLayout(columnCounter)
   } 
+
+  const changeLayout = (columnCounter) => {
+    document.getElementById("gameGrid").style.gridTemplateColumns = "repeat("+columnCounter.toString()+", 1fr)"
+  }
 
   return (
     <main className='board'>
       <h1 className='title'>Minesweeper</h1>
       <BoardFeatures winner={winner} mineCounter={mineCounter} timer={counter} resetGame={resetGame} dataTestId={'catFace'}/>
-      <section className='game'>
+      <section className='game' id='gameGrid'>
         {  
           board.map((row, rowIndex) => {
             return row.map((value, columnIndex) => {
               const cellCoordinate = getTileCoordinate(rowIndex, columnIndex)
               const isClicked = clickedCells.includes(cellCoordinate)
+              
               return (
                 <Tile
                   key={getTileCoordinate(rowIndex, columnIndex)}

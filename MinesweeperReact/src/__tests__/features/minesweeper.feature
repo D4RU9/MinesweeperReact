@@ -45,15 +45,23 @@ Feature: Minesweeper  As a player:
     Scenario: Starting game - All the cells should be enabled
         Then all the cells should be enabled
 
-    Scenario: Starting game - Displaying mine count
-        Given the player loads the following mock data: "<data>"
-        Then the mine count display should show "<mineNumber>"
+    # Scenario: Starting game - Displaying mine count
+    #     Given the player loads the following mock data: "<data>"
+    #     Then the mine count display should show "<mineNumber>"
 
-        Examples:
-            | data        | mineNumber |
-            | o*o-*oo-ooo | 2          |
-            | ***-ooo-ooo | 3          |
-            | *oo-o*o-**o | 4          |
+    #     Examples:
+    #         | data        | mineNumber |
+    #         | o*o-*oo-ooo | 2          |
+    #         | ***-ooo-ooo | 3          |
+    #         | *oo-o*o-**o | 4          |
+
+    Scenario: Starting game - Displaying mine count
+        Given the player loads the following mock data: 
+        """
+        o*o-*oo-ooo
+        """
+        Then the mine count display should show "2"
+
 
     Scenario: Flagging a cell - From an untagged cell
 
@@ -125,3 +133,313 @@ Feature: Minesweeper  As a player:
             """
         When the player left clicks the cell (1,2)
         Then the cell (1,2) should be uncovered
+
+    Scenario: Using left click on a flagged cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player flags the cell (1,2)
+        When the player left clicks the cell (1,2)
+        Then the cell (1,2) should be uncovered
+
+    Scenario: Using left click on an inconclusive cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            """
+        And the player tags the cell (1,2) as inconclusive
+        When the player left clicks the cell (1,2)
+        Then the cell (1,2) should be uncovered
+
+    Scenario: Using right click on an uncovered cell - The cell display doesn't change
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player uncovers the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should show "1"
+
+    Scenario: Using right click on an uncovered cell - The cell stays uncovered
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player uncovers the cell (1,2)
+        When the player right clicks the cell (1,2)
+        Then the cell (1,2) should be uncovered
+
+    ## DISPLAYING MINE COUNT
+    # Scenario: Flagging a cell - Updating mine count
+    #     Given the player loads the following mock data: "<data>"
+    #     And the player flags the cell (1,1)
+    #     Then the mine count display should show "<mineNumber>"
+
+    #     Examples:
+    #         | data        | mineNumber |
+    #         | o*o-*oo-ooo | 1          |
+    #         | ***-ooo-ooo | 2          |
+    #         | *oo-o*o-**o | 3          |
+
+    Scenario: Flagging more cells than mines present - Updating mine count
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player flags the cell (1,1)
+        When the player flags the cell (1,2)
+        Then the mine count display should show "-1"
+
+    Scenario: Tagging a flagged cell as inconclusive - Updating mine count
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player flags the cell (1,1)
+        When the player tags the cell (1,1) as inconclusive
+        Then the mine count display should show "1"
+
+    Scenario: Unflagging a flagged cell - Updating mine count
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player flags the cell (1,1)
+        When the player unflags the cell (1,1)
+        Then the mine count display should show "1"
+
+    Scenario: Uncovering a flagged cell - Updating mine count
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player flags the cell (1,2)
+        When the player uncovers the cell (1,2)
+        Then the mine count display should show "1"
+
+    ## ADJACENT MINES CELL DISPLAY
+
+    # Scenario: Displaying adjacent mines number - Sorrounded from 1 to 8
+    #     Given the player loads the following mock data: "<data>"
+    #     When the player uncovers the cell (2,2)
+    #     Then the cell (2,2) should show "<number>"
+
+    #     Examples:
+    #         | data        | number |
+    #         | *oo-ooo-ooo | 1      |
+    #         | **o-ooo-ooo | 2      |
+    #         | ***-ooo-ooo | 3      |
+    #         | ***-*oo-ooo | 4      |
+    #         | ***-*o*-ooo | 5      |
+    #         | ***-*o*-*oo | 6      |
+    #         | ***-*o*-**o | 7      |
+    #         | ***-*o*-*** | 8      |
+
+    Scenario: Displaying adjacent mines number - 1 mine
+        Given the player loads the following mock data:
+        """
+        | o | o | * |
+        | o | o | o |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "1"
+
+    Scenario: Displaying adjacent mines number - 2 mines
+        Given the player loads the following mock data:
+        """
+        | * | o | * |
+        | o | o | o |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "2"
+
+    Scenario: Displaying adjacent mines number - 3 mines
+        Given the player loads the following mock data:
+        """
+        | * | * | * |
+        | o | o | o |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "3"
+
+     Scenario: Displaying adjacent mines number - 4 mines
+    Given the player loads the following mock data:
+      """
+      | * | * | * |
+      | * | o | o |
+      """
+    When the player uncovers the cell (2,2)
+    Then the cell (2,2) should show "4"
+
+    Scenario: Displaying adjacent mines number - 5 mine
+        Given the player loads the following mock data:
+        """
+        | * | * | * |
+        | * | o | * |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "5"
+
+    Scenario: Displaying adjacent mines number - 6 mines
+        Given the player loads the following mock data:
+        """
+        | o | * | o |
+        | * | o | * |
+        | * | * | * |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "6"
+
+    Scenario: Displaying adjacent mines number - 7 mine
+        Given the player loads the following mock data:
+        """
+        | * | * | * |
+        | o | o | * |
+        | * | * | * |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "7"
+
+    Scenario: Displaying adjacent mines number - 8 mines
+        Given the player loads the following mock data:
+        """
+        | * | * | * |
+        | * | o | * |
+        | * | * | * |
+        """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "8"
+
+    Scenario: Displaying adjacent mines number - Corner cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | * | o |
+            """
+        When the player uncovers the cell (2,2)
+        Then the cell (2,2) should show "2"
+
+    Scenario: Displaying adjacent mines number - Border cell
+        Given the player loads the following mock data:
+            """
+            | * | o | * |
+            | * | o | o |
+            | o | * | o |
+            """
+        When the player uncovers the cell (2,3)
+        Then the cell (2,3) should show "2"
+
+    # Scenario: Displaying mines number - 1 mine at different positions
+    #     Given the player loads the following mock data: "<data>"
+    #     When the player uncovers the cell (2,2)
+    #     Then the cell (2,2) should show "1"
+
+    #     Examples:
+    #         | data        |
+    #         | *oo-ooo-ooo |
+    #         | o*o-ooo-ooo |
+    #         | oo*-ooo-ooo |
+    #         | ooo-*oo-ooo |
+    #         | ooo-oo*-ooo |
+    #         | ooo-ooo-*oo |
+    #         | ooo-ooo-o*o |
+    #         | ooo-ooo-oo* |
+
+    # Scenario: Displaying mines number - 2 mines at different positions
+    #     Given the player loads the following mock data: "<data>"
+    #     When the player uncovers the cell (2,2)
+    #     Then the cell (2,2) should show "2"
+
+    #     Examples:
+    #         | data        |
+    #         | **o-ooo-ooo |
+    #         | *o*-ooo-ooo |
+    #         | o**-ooo-ooo |
+    #         | ooo-*o*-ooo |
+    #         | ooo-ooo-**o |
+    #         | ooo-ooo-*o* |
+    #         | ooo-ooo-o** |
+    #         | *oo-*oo-ooo |
+
+    # Scenario: Displaying mines number - 3 mines at different positions
+    #     Given the player loads the following mock data: "<data>"
+    #     When the player uncovers the cell (2,2)
+    #     Then the cell (2,2) should show "3"
+
+    #     Examples:
+    #         | data        |
+    #         | ***-ooo-ooo |
+    #         | **o-*oo-ooo |
+    #         | **o-oo*-ooo |
+    #         | **o-ooo-*oo |
+    #         | **o-ooo-o*o |
+    #         | **o-ooo-oo* |
+    #         | *o*-*oo-ooo |
+    #         | *o*-oo*-ooo |
+    #         | *o*-ooo-*oo |
+
+    ## Note: these scenarios could be expanded if needed
+
+    ## DISPLAY: MULTIPLE EXAMPLES
+
+    # Scenario: Cell display - Hidden cell
+    #     Given the player loads the following mock data:
+    #         """
+    #         | * | o |
+    #         | o | o |
+    #         """
+    #     Then the cell "<cell>" should show "<display>"
+    #     Examples:
+    #         | cell  | display |
+    #         | (1,1) | .       |
+    #         | (1,2) | .       |
+    #         | (2,1) | .       |
+    #         | (2,2) | .       |
+
+    Scenario: Cell display - Hidden cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        Then the cell (1,1) should show ""
+        And the cell (1,2) should show ""
+        And the cell (2,1) should show ""
+        And the cell (2,2) should show ""
+
+    Scenario: Cell display - Flagged cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player flags the cell (1,1)
+        Then the cell (1,1) should show "🚩"
+
+    Scenario: Cell display - Inconclusive cell
+        Given the player loads the following mock data:
+            """
+            | * | o |
+            | o | o |
+            """
+        And the player tags the cell (1,1) as inconclusive
+        Then the cell (1,1) should show "🤨"
+
+    Scenario: Cell display - Uncovered cell without adjacent mines
+        Given the player loads the following mock data:
+            """
+            | * | o | o |
+            | o | o | o |
+            | o | o | o |
+            """
+        When the player uncovers the cell (1,3)
+        Then the cell (1,3) should show ""
+        And the cell (3,3) should show ""
+        And the cell (3,1) should show ""

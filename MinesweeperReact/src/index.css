@@ -64,27 +64,6 @@ body {
   font-size: 25px;
 }
 
-.board button:hover {
-  background: #eee;
-  color: #222;
-}
-
-.board .game {
-  display: grid;
-  grid-template-columns: repeat(10, 1fr);
-  gap: 10px;
-}
-
-.turn {
-  display: flex;
-  justify-content: center;
-  margin: 15px auto;
-  width: 100px;
-  height: 100px;
-  font-size: 50px;
-  position: relative;
-  border-radius: 10px;
-}
 
 .board-features {
   display: flex;
@@ -116,13 +95,12 @@ body {
   font-size: 25px;
 }
 
-.turn .square,
-.winner .square {
-  width: 100px;
-  height: 100px;
-  pointer-events: none;
-  border-color: transparent;
+.board .game {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 10px;
 }
+
 
 .tile,
 .tileCat {
@@ -137,16 +115,8 @@ body {
 }
 
 .tile:hover {
-  width: 100px;
-  height: 100px;
   border: 2px solid #000000;
   background-color: #eeeeee5b;
-  border-radius: 5px;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  font-size: 48px;
-
 }
 
 .tile.is-uncovered {
